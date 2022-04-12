@@ -1,0 +1,21 @@
+name: Deploy to Heroku
+on:
+  push:
+    tags: # an array
+      -'v*'
+      # push any tag that starts with v
+      -'v*-alpha'
+      # push any tag starting with v EXCEPT alpha
+jobs:
+  deploy_to_heroku:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout src
+      uses: actions/checkout@v2
+    - name: Deploy
+      uses: akhileshns/heroku-deploy@v3.12.12
+      with:
+        heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+        heroku_app_name: vttpworkflowdeploycalculatorap
+        heroku_email: ${{secrets.HEROKU_EMAIL}}
+        branch: ${{github.ref_name}} # selects current branch
